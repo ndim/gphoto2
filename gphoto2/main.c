@@ -132,6 +132,26 @@ strncpy_lower(char *dst, const char *src, size_t count)
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
 
 
+/*! \brief Set FILE to binary translation mode
+ *
+ * This is necessary when stdout was opened by the OS as a text file
+ * (i.e. translating each "\n" to "\r\n" when we write to the file)
+ * and we need to write binary data like e.g. an image file.
+ *
+ * Written for the Windows OS and use with --stdout aka FLAGS_STDOUT,
+ * but there may be more uses.
+ *
+ * \param file A pointer to a stdio.h FILE stream
+ */
+static void
+gpi_file_set_binary_mode(FILE *file)
+{
+#ifdef WIN32
+	_setmode(_fileno(stdout), _O_BINARY);
+#endif
+}
+
+
 /*! \brief Create local filename for CameraFile according to pattern in gp_params
  *
  * \param folder Name of the folder on the camera the CameraFile is stored in
@@ -674,6 +694,7 @@ save_file_to_file (Camera *camera, GPContext *context, Flags flags,
 
 		if (flags & FLAGS_STDOUT_SIZE) /* this will be difficult in fd mode */
                         printf ("%li\n", size);
+		gpi_file_set_binary_mode(stdout);
                 if (1!=fwrite (data, size, 1, stdout))
 			fprintf(stderr,"fwrite failed writing to stdout.\n");
 		if (ps && ps->fd) close (ps->fd);
