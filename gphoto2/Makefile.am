@@ -1,5 +1,8 @@
 ## Process this file with automake to create a GNU Makefile
 
+CLEANFILES =
+noinst_DATA =
+
 # We need to add the source files to the list because 
 # sometimes people without aalib or cdk make dist.
 EXTRA_DIST = \
@@ -57,3 +60,16 @@ TESTS_ENVIRONMENT = GPHOTO_HOOK=$(srcdir)/test-hook.sh
 check_PROGRAMS = spawntest
 
 spawntest_SOURCES = spawntest.c spawnve.c spawnve.h
+
+
+########################################################################
+# Print build flags for gphoto2
+
+CLEANFILES  += gphoto2-buildflags.stamp
+noinst_DATA += gphoto2-buildflags.stamp
+gphoto2-buildflags.stamp: gphoto2$(EXEEXT)
+	@test -z "$(gphoto2_CFLAGS)"   || printf "  %s %-8s %s\n" gp2 CFLAGS   "$(gphoto2_CFLAGS)"
+	@test -z "$(gphoto2_CPPFLAGS)" || printf "  %s %-8s %s\n" gp2 CPPFLAGS "$(gphoto2_CPPFLAGS)"
+	@test -z "$(gphoto2_LDADD)"    || printf "  %s %-8s %s\n" gp2 LDADD    "$(gphoto2_LDADD)"
+	@test -z "$(gphoto2_LDFLAGS)"  || printf "  %s %-8s %s\n" gp2 LDFLAGS  "$(gphoto2_LDFLAGS)"
+	@date > $@
