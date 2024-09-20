@@ -24,8 +24,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          # Avoide macOS build until we can make its jpeg support build on macos
-          # - macos-latest
+          - macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -62,8 +61,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install automake gettext libtool libexif libgphoto2 aalib cdk popt jpeg-xl readline
-          echo LDFLAGS="-L/opt/homebrew/lib" >> $GITHUB_ENV
-          echo CPPFLAGS="-I/opt/homebrew/include" >> $GITHUB_ENV
+          # echo LDFLAGS="-L/opt/homebrew/lib" >> $GITHUB_ENV
+          # echo CPPFLAGS="-I/opt/homebrew/include" >> $GITHUB_ENV
 
       - name: 'OS specific build flags (Linux)'
         if: runner.os == 'Linux'
