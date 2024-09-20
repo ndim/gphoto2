@@ -61,8 +61,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install automake gettext libtool libexif libgphoto2 aalib cdk popt jpeg-xl readline
-          # echo LDFLAGS="-L/opt/homebrew/lib" >> $GITHUB_ENV
-          # echo CPPFLAGS="-I/opt/homebrew/include" >> $GITHUB_ENV
+          echo LDFLAGS="-L/opt/homebrew/lib" >> $GITHUB_ENV
+          echo CFLAGS="-I/opt/homebrew/include" >> $GITHUB_ENV
 
       - name: 'OS specific build flags (Linux)'
         if: runner.os == 'Linux'
